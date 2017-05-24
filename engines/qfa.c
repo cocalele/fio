@@ -4,7 +4,7 @@
 
 #include "../fio.h"
 #include "../optgroup.h"
-#include "qfa_client.h"
+#include "neon_client.h"
 
 //#define DEBUG
 

@@ -1351,8 +1351,8 @@ int main(int argc, char **argv)
   return 0;
 }
 EOF
-if test "$disable_qfa" != "yes"  && compile_prog "-L$qfa_lib -lqfa_common" ""; then
-  LIBS="-lqfa_common -L$qfa_lib $LIBS"
+if test "$disable_qfa" != "yes"  && compile_prog "-L$qfa_lib -lneonsan_common" ""; then
+  LIBS="-lneonsan_common -L$qfa_lib $LIBS"
   qfa="yes"
 fi
 echo "QFA Block Device engine      $qfa"
@@ -1857,7 +1857,7 @@ fi
 if test "$qfa" = "yes" ; then
   output_sym "CONFIG_QFA"
   CFLAGS="$CFLAGS -I$qfa_inc"
-  LDFLAGS="$LDFLAGS -L$qfa_lib -lrdmacm -libverbs -lpthread -lqfa_common -ltoml -lcurl -lzookeeper_mt"
+  LDFLAGS="$LDFLAGS -L$qfa_lib -lrdmacm -libverbs -lpthread -lneonsan_common -ltoml -lcurl -lzookeeper_mt"
 fi
 if test "$rbd_inval" = "yes" ; then
   output_sym "CONFIG_RBD_INVAL"
