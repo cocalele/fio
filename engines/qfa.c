@@ -31,18 +31,18 @@ struct qfa_options {
 static struct fio_option options[] = {
 	{
 		.name		= "volume",
-		.lname		= "qfa engine volume",
+		.lname		= "qbd engine volume",
 		.type		= FIO_OPT_STR_STORE,
-		.help		= "Volume name for QFA engine",
+		.help		= "Volume name for qbd engine",
 		.off1		= offsetof(struct qfa_options, volume_name),
 		.category	= FIO_OPT_C_ENGINE,
 		.group		= FIO_OPT_G_QFA,
 	},
 	{
         .name       = "config_file",
-        .lname      = "qfa configure file",
+        .lname      = "qbd configure file",
         .type       = FIO_OPT_STR_STORE,
-        .help       = "The configure file of QFA store system",
+        .help       = "The configure file of neonsan system",
         .off1       = offsetof(struct qfa_options, config_file),
         .category   = FIO_OPT_C_ENGINE,
         .group      = FIO_OPT_G_QFA,
@@ -61,7 +61,7 @@ static struct fio_option options[] = {
 		.name = "use_tcp",
 		.lname = "Use TCP",
 		.type = FIO_OPT_BOOL,
-		.help = "Use TCP instead of RDMA",
+		.help = "Use TCP instead of RDMA for qbd engine",
 		.off1 = offsetof(struct qfa_options, use_tcp),
 		.def = "0",
 		.category = FIO_OPT_C_ENGINE,
@@ -110,7 +110,7 @@ static int _fio_qfa_connect(struct thread_data *td)
     qbd->vol = qfa_open_volume(o->volume_name,o->config_file, NULL, o->use_tcp?TCP:RDMA);
     if(qbd->vol == NULL)
     {
-        log_err("qfa open volume[%s]  failed!", o->volume_name);
+        log_err("qbd open volume[%s]  failed!", o->volume_name);
         return -1;
     }
     return 0;
@@ -399,7 +399,7 @@ static int fio_qfa_setup(struct thread_data *td)
 
     td->o.use_thread = 1;
 
-	dprint(FD_IO, "qfa-engine: volume size: %lu\n", qbd->vol->size);
+	dprint(FD_IO, "qbd-engine: volume size: %lu\n", qbd->vol->size);
 
     /* taken from "net" engine. Pretend we deal with files,
      * even if we do not have any ideas about files.
@@ -415,7 +415,7 @@ static int fio_qfa_setup(struct thread_data *td)
     r = qfa_query_volume(o->volume_name, o->config_file, &info);
     if (r != 0)
     {
-        log_err("qfa query volume[%s]  failed!", o->volume_name);
+        log_err("qbd query volume[%s]  failed!", o->volume_name);
         r = -1;
         goto cleanup;
     }
@@ -458,7 +458,7 @@ static int fio_qfa_io_u_init(struct thread_data *td, struct io_u *io_u)
 }
 
 static struct ioengine_ops ioengine = {
-	.name			= "qfa",
+	.name			= "qbd",
 	.version		= FIO_IOOPS_VERSION,
 	.setup			= fio_qfa_setup,
 	.init			= fio_qfa_init,
